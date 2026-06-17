@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-management
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: products-management
+  template:
+    metadata:
+      labels:
+        app: products-management
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: products-management
+          image: ghcr.io/wanchai3291/products-management:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-management
+  namespace: default
+spec:
+  selector:
+    app: products-management
+  ports:
+    - port: 80
+      targetPort: 3000
