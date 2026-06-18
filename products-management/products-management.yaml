@@ -36,6 +36,7 @@ metadata:
   name: products-management
   namespace: default
 spec:
+  type: LoadBalancer
   selector:
     app: products-management
   ports:
